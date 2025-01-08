@@ -1,0 +1,48 @@
+<resources>
+    <!-- Genel Uygulama Stringleri -->
+    <string name="app_name">Namaz Vakitleri</string>
+    <string name="error_location">Konum Bulunamadı</string>
+    <string name="settings">Ayarlar</string>
+    <string name="notification_permission_prompt">Namaz vakitlerini kaçırmamak için bildirimlere izin verin!</string>
+    <string name="skip_button">Atla</string>
+    <string name="allow_button">İzin Ver</string>
+    <string name="open_notification_settings">Bildirimi Ayarlardan Aç</string>
+    <string name="Qible">Kıble</string>
+    <string name="Home">Ana Sayfa</string>
+    <!-- Location  Screen -->
+    <string name="location_title">Konum</string>
+    <string name="location_icon_description">Konum İkonu</string>
+    <string name="location_permission_message">Doğru namaz vakitlerini gösterebilmemiz için konum iznine ihtiyacımız var. Lütfen izin verin.</string>
+    <string name="enable_gps">GPS\'i Etkinleştir</string>
+    <string name="open_location_settings">Konum Ayarlarını Aç</string>
+    <string name="select_location_manually">Konumu Manuel Seç</string>
+    <string name="grant_location_permission">Konum Erişimine İzin Ver</string>
+    <string name="update_location">Konumu Güncelle</string>
+    <string name="grant_notification_permission">Bildirim Erişimine İzin Ver</string>
+
+    <!-- Namaz Vakti Açıklamaları -->
+    <string name="fajr_prayer_countdown">Sabah Namazına Kalan Süre</string>
+    <string name="sunrise_prayer_countdown">Güneşin Doğuşuna   Kalan Süre</string>
+    <string name="dhuhr_prayer_countdown">Öğle Namazına Kalan Süre</string>
+    <string name="asr_prayer_countdown">İkindi Namazına Kalan Süre</string>
+    <string name="maghrib_prayer_countdown">Akşam Namazına Kalan Süre</string>
+    <string name="isha_prayer_countdown">Yatsı Namazına Kalan Süre</string>
+    <string name="imsak_countdown">İmsak Bitmesine Kalan Süre</string>
+
+    <!-- Namaz İsimleri -->
+    <string name="prayer_fajr">Sabah</string>
+    <string name="prayer_dhuhr">Öğle</string>
+    <string name="prayer_asr">İkindi</string>
+    <string name="prayer_maghrib">Akşam</string>
+    <string name="prayer_isha">Yatsı</string>
+    <string name="prayer_imsak">İmsak</string>
+
+
+    <string name="verse_text">Sana vahyedilen Kitab’ı oku ve namazı kıl. Şüphesiz ki namaz, hayasızlıktan ve kötülükten alıkoyar. Allah’ı anmak elbette en büyüktür. Allah, yaptıklarınızı bilir.</string>
+    <string name="surah_name">Ankebut Sures</string>
+    <string name="verse_number">45. Ayet</string>
+    
+    <string name="channel_new_messages">Namaz Vakti</string>
+    <string name="channel_new_messages_description">Namaz Vakti Bildirimleri</string>
+
+</resources>
