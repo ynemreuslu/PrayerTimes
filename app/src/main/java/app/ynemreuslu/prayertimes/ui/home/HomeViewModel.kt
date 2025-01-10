@@ -59,19 +59,19 @@ class HomeViewModel @Inject constructor(
     private var countdownJob: Job? = null
 
     init {
-        initializeViewModel()
+       initializeViewModel()
     }
 
     fun onAction(action: HomeContract.UiAction) {
         when (action) {
-            HomeContract.UiAction.NavigateToMap -> {}
+            else -> {}
         }
     }
 
     private fun initializeViewModel() {
-        loadLastKnownLocation()
-        fetchLocation()
-        fetchCalender()
+            loadLastKnownLocation()
+            fetchLocation()
+            fetchCalender()
     }
 
     private fun locationRequest() {
@@ -83,31 +83,34 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun loadLastKnownLocation() {
-        viewModelScope.launch {
-            updateUiState {
-                copy(
-                    isLoading = true
+            viewModelScope.launch {
+                updateUiState {
+                    copy(
+                        isLoading = true
+                    )
+                }
+                val location = buildLocationString(
+                    locationUseCase.getLatitude(),
+                    locationUseCase.getLongitude()
                 )
-            }
-            val location = buildLocationString(
-                locationUseCase.getLatitude(),
-                locationUseCase.getLongitude()
-            )
 
-
-            if (location != DEFAULT_LOCATION) {
-                updateUiState { copy(location = location) }
-                fetchPrayerTimings(location)
-                updateUiState { copy(isLoading = false) }
+                if (location != DEFAULT_LOCATION) {
+                    updateUiState { copy(location = location) }
+                    fetchPrayerTimings(location)
+                    updateUiState {
+                        copy(isLoading = false)
+                    }
+                }
             }
-        }
     }
 
     private fun fetchLocation() {
-        if (checkLocationPermissions()) {
-            initializeLocationUpdates()
-        } else {
-            loadLastKnownLocation()
+        viewModelScope.launch {
+            if (checkLocationPermissions()) {
+                initializeLocationUpdates()
+            } else {
+                loadLastKnownLocation()
+            }
         }
     }
 
@@ -115,18 +118,20 @@ class HomeViewModel @Inject constructor(
         appContext.hasLocationPermissionGranted(appContext)
 
     private fun initializeLocationUpdates() {
-        try {
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location ->
-                    location?.let {
-                        updateLocationData(it.latitude, it.longitude)
-                    } ?: requestCurrentLocationUpdate()
-                }
-                .addOnFailureListener { exception ->
-                    handleLocationFailure(exception)
-                }
-        } catch (securityException: SecurityException) {
-            handleSecurityException(securityException)
+        viewModelScope.launch {
+            try {
+                fusedLocationClient.lastLocation
+                    .addOnSuccessListener { location ->
+                        location?.let {
+                            updateLocationData(it.latitude, it.longitude)
+                        } ?: requestCurrentLocationUpdate()
+                    }
+                    .addOnFailureListener { exception ->
+                        handleLocationFailure(exception)
+                    }
+            } catch (securityException: SecurityException) {
+                handleSecurityException(securityException)
+            }
         }
     }
 
@@ -140,11 +145,11 @@ class HomeViewModel @Inject constructor(
                 copy(location = buildLocationString(latitude, longitude))
             }
             fetchPrayerTimings(buildLocationString(latitude, longitude))
-
         }
+
     }
 
-    fun fetchPrayerTimings(address: String) {
+    private fun fetchPrayerTimings(address: String) {
         viewModelScope.launch {
             getPrayerTimingsUseCase.invoke(
                 date = formatDate(LocalDate.now(), Locale.getDefault()),
@@ -179,25 +184,23 @@ class HomeViewModel @Inject constructor(
 
 
     private fun requestCurrentLocationUpdate() {
-        if (!checkLocationPermissions()) {
-            loadLastKnownLocation()
-            return
-        }
-
-        try {
-            val cancellationToken = CancellationTokenSource().token
-            fusedLocationClient.getCurrentLocation(
-                Priority.PRIORITY_HIGH_ACCURACY,
-                cancellationToken
-            ).apply {
-                addOnSuccessListener(::handleLocationSuccess)
-                addOnFailureListener(::handleLocationFailure)
+            if (!checkLocationPermissions()) {
+                loadLastKnownLocation()
             }
-        } catch (securityException: SecurityException) {
-            handleSecurityException(securityException)
-        } catch (exception: Exception) {
-            handleGeneralException(exception)
-        }
+            try {
+                val cancellationToken = CancellationTokenSource().token
+                fusedLocationClient.getCurrentLocation(
+                    Priority.PRIORITY_HIGH_ACCURACY,
+                    cancellationToken
+                ).apply {
+                    addOnSuccessListener(::handleLocationSuccess)
+                    addOnFailureListener(::handleLocationFailure)
+                }
+            } catch (securityException: SecurityException) {
+                handleSecurityException(securityException)
+            } catch (exception: Exception) {
+                handleGeneralException(exception)
+            }
     }
 
     private fun handleLocationSuccess(location: Location?) {
@@ -255,7 +258,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun startPrayerTimeCountdown(prayerTimings: PrayerTimings) {
+   private fun startPrayerTimeCountdown(prayerTimings: PrayerTimings) {
         countdownJob?.cancel()
 
         countdownJob = viewModelScope.launch {
@@ -323,6 +326,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun buildLocationString(latitude: Double?, longitude: Double?): String {
+
         val lat = latitude ?: 0.0
         val lng = longitude ?: 0.0
 

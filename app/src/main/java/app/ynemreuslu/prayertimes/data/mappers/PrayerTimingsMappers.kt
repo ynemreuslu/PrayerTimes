@@ -1,8 +1,8 @@
 package app.ynemreuslu.prayertimes.data.mappers
 
-import app.ynemreuslu.prayertimes.data.source.model.prayer.PrayerDataDto
-import app.ynemreuslu.prayertimes.data.source.model.prayer.PrayerTimingsDto
-import app.ynemreuslu.prayertimes.data.source.model.prayer.TimingsDto
+import app.ynemreuslu.prayertimes.data.source.model.PrayerDataDto
+import app.ynemreuslu.prayertimes.data.source.model.PrayerTimingsDto
+import app.ynemreuslu.prayertimes.data.source.model.TimingsDto
 import app.ynemreuslu.prayertimes.domain.prayer.PrayerData
 import app.ynemreuslu.prayertimes.domain.prayer.PrayerTimings
 import app.ynemreuslu.prayertimes.domain.prayer.Timings

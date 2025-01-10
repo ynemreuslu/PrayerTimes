@@ -1,9 +1,7 @@
 package app.ynemreuslu.prayertimes.di
 
 import app.ynemreuslu.prayertimes.data.repository.PrayerTimeRepositoryImpl
-import app.ynemreuslu.prayertimes.data.repository.QibleRepositoryImpl
 import app.ynemreuslu.prayertimes.domain.repository.PrayerTimeRepository
-import app.ynemreuslu.prayertimes.domain.repository.QiblaRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -19,12 +17,5 @@ abstract class RepositoryModule {
     abstract fun bindPrayerTimeRepository(
         prayerTimeRepositoryImpl: PrayerTimeRepositoryImpl
     ): PrayerTimeRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindQibleRepository(
-        qibleRepositoryImpl: QibleRepositoryImpl
-    ): QiblaRepository
-
 
 }

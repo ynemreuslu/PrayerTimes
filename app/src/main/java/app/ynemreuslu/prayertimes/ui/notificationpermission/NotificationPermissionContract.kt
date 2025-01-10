@@ -16,15 +16,15 @@ object NotificationPermissionContract {
     }
 
     sealed class UiAction {
-        object RequestPermission : UiAction()
-        object OpenAppSettings : UiAction()
-        object SkipPermission : UiAction()
+        data object RequestPermission : UiAction()
+        data object OpenAppSettings : UiAction()
+        data object SkipPermission : UiAction()
     }
 
     sealed class UiEffect {
-        object PermissionRequest : UiEffect()
-        object NavigateToHome : UiEffect()
-        object NavigateToSettings : UiEffect()
-        object UpdateButtonState : UiEffect()
+         object PermissionRequest : UiEffect()
+         object NavigateToHome : UiEffect()
+         object NavigateToSettings : UiEffect()
+         object UpdateButtonState : UiEffect()
     }
 }

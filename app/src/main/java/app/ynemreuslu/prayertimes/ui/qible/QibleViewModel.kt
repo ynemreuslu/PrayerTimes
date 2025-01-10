@@ -1,16 +1,9 @@
 package app.ynemreuslu.prayertimes.ui.qible
 
 import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.ynemreuslu.prayertimes.domain.usescase.GetQiblaUseCase
 import app.ynemreuslu.prayertimes.domain.usescase.LocationUseCase
-import app.ynemreuslu.prayertimes.util.Resource
-import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -25,7 +18,6 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class QibleViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val getQiblaUseCase: GetQiblaUseCase,
     private val locationUseCase: LocationUseCase,
     private val compassQibla: CompassQibla,
 ) : ViewModel() {
@@ -41,7 +33,7 @@ class QibleViewModel @Inject constructor(
         updateLocation()
     }
 
-    fun updateLocation() {
+   private fun updateLocation() {
         viewModelScope.launch {
             val lat = locationUseCase.getLatitude()
             val long = locationUseCase.getLongitude()
@@ -57,7 +49,7 @@ class QibleViewModel @Inject constructor(
         }
     }
 
-    fun updateRotation() {
+  private fun updateRotation() {
         compassQibla.startListening()
         compassQibla.setOnRotationChangedListener {
             updateUiState {

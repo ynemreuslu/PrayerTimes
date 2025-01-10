@@ -1,175 +1,99 @@
 package app.ynemreuslu.prayertimes.data.repository
 
 
-import androidx.collection.arraySetOf
+import android.content.SharedPreferences
 import jakarta.inject.Inject
-import androidx.datastore.core.DataStore
-import androidx.datastore.core.IOException
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.doublePreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.core.stringSetPreferencesKey
 import app.ynemreuslu.prayertimes.domain.repository.LocalPermissionManagerRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
 
 class LocalPermissionManagerImpl @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    private val sharedPreferences: SharedPreferences
 ) : LocalPermissionManagerRepository {
 
     override fun isLocationPermissionGranted(): Boolean {
-        return runBlocking {
-            dataStore.data.first().let { preferences ->
-                preferences[PreferencesKeys.LOCATION_PERMISSION_GRANTED] ?: false
-            }
-        }
+        return sharedPreferences.getBoolean(KEY_LOCATION_PERMISSION_GRANTED, false)
     }
 
     override suspend fun setLocationPermissionGrantedStatus(isGranted: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.LOCATION_PERMISSION_GRANTED] = isGranted
-        }
+        sharedPreferences.edit().putBoolean(KEY_LOCATION_PERMISSION_GRANTED, isGranted).apply()
     }
 
-    override suspend fun fetchLatitude(latitude: Double) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.LATITUDE] = latitude
-        }
+    override  fun fetchLatitude(latitude: Double) {
+        sharedPreferences.edit().putFloat(KEY_LATITUDE, latitude.toFloat()).apply()
     }
 
-    override suspend fun getLatitude(): Double {
-        return dataStore.data.first().let { preferences ->
-            preferences[PreferencesKeys.LATITUDE] ?: 0.0
-        }
+    override  fun getLatitude(): Double {
+        return sharedPreferences.getFloat(KEY_LATITUDE, 0.0f).toDouble()
     }
 
-    override suspend fun fetchLongitude(longitude: Double) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.LONGITUDE] = longitude
-        }
+    override  fun fetchLongitude(longitude: Double) {
+        sharedPreferences.edit().putFloat(KEY_LONGITUDE, longitude.toFloat()).apply()
     }
 
-    override suspend fun getLongitude(): Double {
-        return dataStore.data.first().let { preferences ->
-            preferences[PreferencesKeys.LONGITUDE] ?: 0.0
-        }
+    override  fun getLongitude(): Double {
+        return sharedPreferences.getFloat(KEY_LONGITUDE, 0.0f).toDouble()
     }
-
 
     override suspend fun getLocationPermissionStatus(): String {
-        return dataStore.data.first().let { preferences ->
-            preferences[PreferencesKeys.LOCATION_PERMISSION_STATUS] ?: ""
-        }
+        return sharedPreferences.getString(KEY_LOCATION_PERMISSION_STATUS, "") ?: ""
     }
 
     override fun isGpsDisabled(): Boolean {
-        return runBlocking {
-            dataStore.data.first().let { preferences ->
-                preferences[PreferencesKeys.GPS_DISABLED] ?: false
-            }
-        }
+        return sharedPreferences.getBoolean(KEY_GPS_DISABLED, false)
     }
 
     override suspend fun setGpsStatus(isDisabled: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.GPS_DISABLED] = isDisabled
-        }
+        sharedPreferences.edit().putBoolean(KEY_GPS_DISABLED, isDisabled).apply()
     }
 
     override suspend fun setLocationPermissionStatus(status: String) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.LOCATION_PERMISSION_STATUS] = status
-        }
+        sharedPreferences.edit().putString(KEY_LOCATION_PERMISSION_STATUS, status).apply()
     }
 
     override fun isNotificationPermissionGranted(): Boolean {
-        return runBlocking {
-            dataStore.data.first().let { preferences ->
-                preferences[PreferencesKeys.NOTIFICATION_PERMISSION_GRANTED] ?: false
-            }
-        }
+        return sharedPreferences.getBoolean(KEY_NOTIFICATION_PERMISSION_GRANTED, false)
     }
 
     override suspend fun setNotificationPermissionGrantedStatus(isGranted: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.NOTIFICATION_PERMISSION_GRANTED] = isGranted
-        }
+        sharedPreferences.edit().putBoolean(KEY_NOTIFICATION_PERMISSION_GRANTED, isGranted).apply()
     }
 
     override suspend fun getNotificationPermissionDeniedCount(): Int {
-        return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }
-            .map { preferences ->
-                preferences[PreferencesKeys.NOTIFICATION_PERMISSION_DENIED_COUNT] ?: 0
-            }
-            .first()
+        return sharedPreferences.getInt(KEY_NOTIFICATION_PERMISSION_DENIED_COUNT, 0)
     }
 
     override suspend fun incrementNotificationPermissionDeniedCount() {
-        dataStore.edit { preferences ->
-            val currentCount =
-                preferences[PreferencesKeys.NOTIFICATION_PERMISSION_DENIED_COUNT] ?: 0
-            preferences[PreferencesKeys.NOTIFICATION_PERMISSION_DENIED_COUNT] = currentCount + 1
-        }
+        val currentCount = getNotificationPermissionDeniedCount()
+        sharedPreferences.edit().putInt(KEY_NOTIFICATION_PERMISSION_DENIED_COUNT, currentCount + 1).apply()
     }
 
     override suspend fun resetNotificationPermissionDeniedCount() {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.NOTIFICATION_PERMISSION_DENIED_COUNT] = 0
-        }
+        sharedPreferences.edit().putInt(KEY_NOTIFICATION_PERMISSION_DENIED_COUNT, 0).apply()
     }
 
     override suspend fun getNotificationPermissionStatus(): String {
-        return dataStore.data.first().let { preferences ->
-            preferences[PreferencesKeys.NOTIFICATION_PERMISSION_STATUS] ?: ""
-        }
+        return sharedPreferences.getString(KEY_NOTIFICATION_PERMISSION_STATUS, "") ?: ""
     }
 
     override suspend fun setNotificationPermissionStatus(status: String) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.NOTIFICATION_PERMISSION_STATUS] = status
-        }
+        sharedPreferences.edit().putString(KEY_NOTIFICATION_PERMISSION_STATUS, status).apply()
     }
 
     override fun isSkipButtonEnabled(): Boolean {
-        return runBlocking {
-            dataStore.data.first().let { preferences ->
-                preferences[PreferencesKeys.SKIP_BUTTON_ENABLED] ?: false
-            }
-        }
+        return sharedPreferences.getBoolean(KEY_SKIP_BUTTON_ENABLED, false)
     }
 
     override suspend fun setSkipButtonState(isEnabled: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.SKIP_BUTTON_ENABLED] = isEnabled
-        }
+        sharedPreferences.edit().putBoolean(KEY_SKIP_BUTTON_ENABLED, isEnabled).apply()
     }
-
-    private object PreferencesKeys {
-        val LOCATION_PERMISSION_GRANTED = booleanPreferencesKey("location_permission_granted")
-        val NOTIFICATION_PERMISSION_GRANTED =
-            booleanPreferencesKey("notification_permission_granted")
-        val SKIP_BUTTON_ENABLED = booleanPreferencesKey("skip_button_enabled")
-        val LATITUDE = doublePreferencesKey("latitude")
-        val LONGITUDE = doublePreferencesKey("longitude")
-        val NOTIFICATION_PERMISSION_STATUS = stringPreferencesKey("notification_permission_status")
-        val LOCATION_PERMISSION_STATUS = stringPreferencesKey("location_permission_status")
-        val NOTIFICATION_PERMISSION_DENIED_COUNT =
-            intPreferencesKey("notification_permission_denied_count")
-        val GPS_DISABLED = booleanPreferencesKey("gps_disabled")
+    companion object {
+        private const val KEY_LOCATION_PERMISSION_GRANTED = "location_permission_granted"
+        private const val KEY_NOTIFICATION_PERMISSION_GRANTED = "notification_permission_granted"
+        private const val KEY_SKIP_BUTTON_ENABLED = "skip_button_enabled"
+        private const val KEY_LATITUDE = "latitude"
+        private const val KEY_LONGITUDE = "longitude"
+        private const val KEY_NOTIFICATION_PERMISSION_STATUS = "notification_permission_status"
+        private const val KEY_LOCATION_PERMISSION_STATUS = "location_permission_status"
+        private const val KEY_NOTIFICATION_PERMISSION_DENIED_COUNT = "notification_permission_denied_count"
+        private const val KEY_GPS_DISABLED = "gps_disabled"
     }
 }

@@ -1,8 +1,7 @@
 package app.ynemreuslu.prayertimes.ui.home
 
 import app.ynemreuslu.prayertimes.domain.prayer.PrayerTimings
-import java.time.LocalDate
-import java.util.Date
+
 
 
 object HomeContract {
@@ -24,11 +23,10 @@ object HomeContract {
 
 
     sealed class UiAction {
-        object NavigateToMap : UiAction()
+
     }
 
     sealed class UiEffect {
-        data class ShowPrayerTimesForDate(val date: LocalDate) : UiEffect()
-        object RequestLocationPermission : UiEffect()
+         object RequestLocationPermission : UiEffect()
     }
 }

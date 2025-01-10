@@ -3,12 +3,13 @@ package app.ynemreuslu.prayertimes.ui.navigation
 
 import android.content.Intent
 import android.provider.Settings
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -26,7 +27,6 @@ import app.ynemreuslu.prayertimes.domain.usescase.SkipButtonUseCase
 import app.ynemreuslu.prayertimes.ui.qible.QibleScreen
 import app.ynemreuslu.prayertimes.ui.home.HomeScreen
 import app.ynemreuslu.prayertimes.ui.home.HomeViewModel
-import app.ynemreuslu.prayertimes.ui.map.MapScreen
 import app.ynemreuslu.prayertimes.ui.qible.QibleViewModel
 
 
@@ -41,29 +41,43 @@ fun SetupNavGraph(
     skipButtonUseCase: SkipButtonUseCase,
 ) {
     val context = LocalContext.current
-    val startDestination by remember {
-        mutableStateOf(
-            when {
-                locationPermissionUseCase.checkPermissionGranted() && gspControllerUseCase.isGpsDisabled() -> {
-                    NavRoute.LOCATION_PERMISSION.route
-                }
-
-                notificationUseCase.checkPermissionGranted() -> {
-                    NavRoute.HOME.route
-                }
-                skipButtonUseCase.isSkipButtonEnabled() -> {
-                    NavRoute.HOME.route
-                }
-                else -> {
-                    NavRoute.LOCATION_PERMISSION.route
-                }
-            }
-        )
+    val startDestination = remember {
+        when {
+            locationPermissionUseCase.checkPermissionGranted() &&
+                    gspControllerUseCase.isGpsDisabled() -> NavRoute.LOCATION_PERMISSION.route
+            notificationUseCase.checkPermissionGranted() -> NavRoute.HOME.route
+            skipButtonUseCase.isSkipButtonEnabled() -> NavRoute.HOME.route
+            else -> NavRoute.LOCATION_PERMISSION.route
+        }
     }
 
     NavHost(
         navController = navController,
         startDestination = startDestination,
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Start,
+                tween(300)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                tween(300)
+            )
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.End,
+                tween(300)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                tween(300)
+            )
+        },
         modifier = modifier
     ) {
         composable(route = NavRoute.LOCATION_PERMISSION.route) {
@@ -75,7 +89,7 @@ fun SetupNavGraph(
                 uiEffect = viewModel.uiEffect,
                 onNavigateToNextScreen = {
                     navController.navigate(NavRoute.NOTIFICATION_PERMISSION.route) {
-                        popUpTo(NavRoute.LOCATION_PERMISSION.route) { inclusive = true }
+                        popUpTo(NavRoute.LOCATION_PERMISSION.route) { inclusive = false }
                     }
                 }
             )
@@ -111,7 +125,6 @@ fun SetupNavGraph(
                 uiState = uiState,
                 onAction = viewModel::onAction,
                 uiEffect = viewModel.uiEffect,
-                mapNextScreen = { navController.navigate(NavRoute.MAP.route) }
             )
         }
 
@@ -120,8 +133,7 @@ fun SetupNavGraph(
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             QibleScreen(uiState)
         }
-        composable(route = NavRoute.MAP.route) {
-            MapScreen()
-        }
+
     }
 }
+

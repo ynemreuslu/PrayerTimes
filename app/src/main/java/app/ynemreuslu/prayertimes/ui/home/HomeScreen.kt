@@ -1,15 +1,8 @@
 package app.ynemreuslu.prayertimes.ui.home
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.os.Build
-import android.widget.Toast
-import androidx.annotation.RequiresPermission
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,29 +14,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -52,7 +36,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.NotificationCompat
 import app.ynemreuslu.prayertimes.R
 import app.ynemreuslu.prayertimes.common.collectWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -61,15 +44,11 @@ import kotlinx.coroutines.flow.Flow
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
-@RequiresPermission(
-    anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION],
-)
 @Composable
 fun HomeScreen(
     uiState: HomeContract.UiState,
     onAction: (HomeContract.UiAction) -> Unit,
     uiEffect: Flow<HomeContract.UiEffect>,
-    mapNextScreen: () -> Unit,
 ) {
     val locationPermissions = remember {
         listOf(
@@ -85,10 +64,6 @@ fun HomeScreen(
 
     uiEffect.collectWithLifecycle { effect ->
         when (effect) {
-            is HomeContract.UiEffect.ShowPrayerTimesForDate -> {
-                // Handle showing prayer times for a specific date
-            }
-
             HomeContract.UiEffect.RequestLocationPermission -> {
                 locationPermissionState.launchMultiplePermissionRequest()
             }
@@ -117,26 +92,20 @@ fun HomeScreen(
                 locationInfo = "${uiState.location}",
                 gregorianCalendar = "${uiState.gregorianDate}",
                 hijriCalendar = "${uiState.hijriDate}",
-                mapNextScreen = mapNextScreen,
             )
-            Spacer(modifier = Modifier.height(16.dp))
             PrayerTimeCard(uiState)
-            Spacer(modifier = Modifier.height(16.dp))
             VerseText()
-            Spacer(modifier = Modifier.height(16.dp))
             PrayerTimesSection(uiState)
         }
     }
 
 }
 
-
 @Composable
 private fun HeaderSection(
     locationInfo: String,
     gregorianCalendar: String,
     hijriCalendar: String,
-    mapNextScreen: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -145,18 +114,16 @@ private fun HeaderSection(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LocationSection(locationInfo, mapNextScreen)
+        LocationSection(locationInfo)
         CalendarSection(gregorianCalendar, hijriCalendar)
-
     }
 }
 
 @Composable
-private fun LocationSection(
-    locationInfo: String, mapNextScreen: () -> Unit
+fun LocationSection(
+    locationInfo: String,
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.clickable { mapNextScreen() }) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(R.drawable.ic_location),
             contentDescription = stringResource(R.string.location_icon_description),
@@ -204,7 +171,6 @@ private fun CalendarSection(
         )
     }
 }
-
 
 @Composable
 fun PrayerTimeCard(uiState: HomeContract.UiState) {

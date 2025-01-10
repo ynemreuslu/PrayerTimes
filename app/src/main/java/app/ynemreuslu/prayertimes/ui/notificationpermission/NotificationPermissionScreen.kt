@@ -37,6 +37,7 @@ import app.ynemreuslu.prayertimes.common.collectWithLifecycle
 import app.ynemreuslu.prayertimes.ui.notificationpermission.NotificationPermissionContract.RequestStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalPermissionsApi::class)

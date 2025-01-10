@@ -1,11 +1,8 @@
 package app.ynemreuslu.prayertimes.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.hardware.SensorManager
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.PreferenceDataStoreFactory
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStoreFile
 import app.ynemreuslu.prayertimes.data.repository.LocalPermissionManagerImpl
 import app.ynemreuslu.prayertimes.domain.repository.LocalPermissionManagerRepository
 import dagger.Module
@@ -18,20 +15,24 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object LocalManagerModule {
+
     @Provides
     @Singleton
-    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(
-            produceFile = { context.preferencesDataStoreFile("app_preferences") }
+    fun provideSharedPreferences(
+        @ApplicationContext context: Context
+    ): SharedPreferences {
+        return context.getSharedPreferences(
+            "app_preferences",
+            Context.MODE_PRIVATE
         )
     }
 
     @Provides
     @Singleton
-    fun provideLocalManagerRepository(
-        dataStore: DataStore<Preferences>
+    fun provideLocalPermissionManagerRepository(
+        sharedPreferences: SharedPreferences
     ): LocalPermissionManagerRepository {
-        return LocalPermissionManagerImpl(dataStore)
+        return LocalPermissionManagerImpl(sharedPreferences)
     }
 
     @Provides

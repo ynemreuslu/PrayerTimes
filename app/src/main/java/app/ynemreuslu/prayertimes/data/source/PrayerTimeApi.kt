@@ -1,6 +1,6 @@
 package app.ynemreuslu.prayertimes.data.source
 
-import app.ynemreuslu.prayertimes.data.source.model.prayer.PrayerTimingsDto
+import app.ynemreuslu.prayertimes.data.source.model.PrayerTimingsDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 

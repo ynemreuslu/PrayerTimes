@@ -40,17 +40,21 @@ class NotificationPermissionViewModel @Inject constructor(
 
     init {
         checkIfSkipped()
+        checkPermissionGranted()
     }
 
     private fun checkIfSkipped() {
+        if (skipButtonUseCase.isSkipButtonEnabled()) {
+            navigateToHomeScreen()
+        }
+    }
+    private fun checkPermissionGranted() {
         viewModelScope.launch {
-            val isSkipped = skipButtonUseCase.isSkipButtonEnabled()
-            if (isSkipped) {
+            if (_uiState.value.isPermissionGranted == true) {
                 navigateToHomeScreen()
             }
         }
     }
-
 
     fun onAction(action: NotificationPermissionContract.UiAction) {
         when (action) {

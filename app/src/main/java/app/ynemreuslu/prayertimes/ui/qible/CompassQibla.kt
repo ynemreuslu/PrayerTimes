@@ -15,7 +15,7 @@ class CompassQibla @Inject constructor (private val sensorManager: SensorManager
     private var qiblaDirection: Float = 0f
     private var currentRotation: Float = 0f
 
-    // Callback for rotation updates
+
     private var onRotationChanged: ((Float) -> Unit)? = null
 
     fun startListening() {
@@ -52,8 +52,8 @@ class CompassQibla @Inject constructor (private val sensorManager: SensorManager
     }
 
     fun calculateQiblaDirection(latitude: Double, longitude: Double) {
-        val kaabaLat = 21.422487 // Kaaba latitude
-        val kaabaLong = 39.826206 // Kaaba longitude
+        val kaabaLat = 21.422487
+        val kaabaLong = 39.826206
 
         val l1 = Math.toRadians(latitude)
         val l2 = Math.toRadians(kaabaLat)

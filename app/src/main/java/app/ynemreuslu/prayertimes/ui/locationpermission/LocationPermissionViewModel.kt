@@ -13,7 +13,6 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.activity.result.IntentSenderRequest
 import app.ynemreuslu.prayertimes.common.GpsStatusFlow
-import app.ynemreuslu.prayertimes.common.LocationTracker
 import app.ynemreuslu.prayertimes.common.hasLocationPermissionGranted
 import app.ynemreuslu.prayertimes.domain.usescase.GpsControllerUseCase
 import app.ynemreuslu.prayertimes.domain.usescase.LocationPermissionUseCase
@@ -26,7 +25,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
@@ -37,7 +35,6 @@ class LocationPermissionViewModel @Inject constructor(
     private val gpsStatus: GpsStatusFlow,
     private val gpsControllerUseCase: GpsControllerUseCase,
     private val locationPermissionUseCase: LocationPermissionUseCase,
-    private val locationTracker: LocationTracker
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LocationPermissionContract.UiState())
@@ -81,16 +78,6 @@ class LocationPermissionViewModel @Inject constructor(
                         verifyGpsSettings()
                         emitUiEffect(LocationPermissionContract.UiEffect.UpdateActionButtonText)
                     } else {
-                        locationTracker.getCurrentLocation().onEach {
-                            updateUiState {
-                                copy(
-                                    latitude = it.latitude,
-                                    longitude = it.longitude
-
-                                )
-                            }
-
-                        }
                         gpsControllerUseCase.invoke(false)
                         locationPermissionUseCase.invoke(true)
                         navigateToNextScreen()

@@ -1,4 +1,4 @@
-package app.ynemreuslu.prayertimes.data.source.model.prayer
+package app.ynemreuslu.prayertimes.data.source.model
 
 data class PrayerTimingsDto(
     val code: Int,

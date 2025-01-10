@@ -15,6 +15,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -42,22 +45,21 @@ fun BottomNavigationBar(
     val currentRoute = navBackStackEntry?.destination?.route
 
     Box(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth(),
         contentAlignment = Alignment.BottomCenter
     ) {
         Surface(
-            color = Color.White,
+            color = MaterialTheme.colorScheme.surface,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .height(64.dp),
         ) {
-            BottomNavigation(
-                backgroundColor = MaterialTheme.colorScheme.onPrimary,
-                contentColor = MaterialTheme.colorScheme.primary,
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.surface,
+                tonalElevation = 0.dp,
             ) {
                 items.forEach { item ->
-                    BottomNavigationItem(
+                    NavigationBarItem(
                         icon = {
                             Icon(
                                 painter = painterResource(
@@ -65,11 +67,20 @@ fun BottomNavigationBar(
                                 ),
                                 contentDescription = item.route,
                                 modifier = Modifier.size(24.dp),
+                                tint = if (currentRoute == item.route) {
+                                    MaterialTheme.colorScheme.primary
+                                } else MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         },
                         selected = currentRoute == item.route,
                         onClick = { onItemClick(item) },
-                        alwaysShowLabel = currentRoute == item.route
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.primary,
+                            unselectedIconColor = MaterialTheme.colorScheme.primary,
+                            selectedTextColor = MaterialTheme.colorScheme.primary,
+                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            indicatorColor = MaterialTheme.colorScheme.onPrimary
+                        )
                     )
                 }
             }
