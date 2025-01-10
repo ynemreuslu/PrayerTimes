@@ -20,13 +20,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.ynemreuslu.prayertimes.R
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlin.math.roundToInt
 
 @Composable
-fun QibleScreen(uiState: QibleContract.UiState) {
+fun QibleScreen(
+    uiState: QibleContract.UiState,
+    onAction: (QibleContract.UiAction) -> Unit,
+    uiEffect: Flow<QibleContract.UiEffect>
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -50,8 +58,8 @@ fun QibleScreen(uiState: QibleContract.UiState) {
             modifier = Modifier.padding(top = 16.dp)
         )
 
-        val qiblaDirectionDegrees  = uiState.qiblaDirection ?: 0f
-        val rotationDegrees  = uiState.rotation ?: 0f
+        val qiblaDirectionDegrees = uiState.qiblaDirection ?: 0f
+        val rotationDegrees = uiState.rotation ?: 0f
 
         Box(
             modifier = Modifier
@@ -75,8 +83,21 @@ fun QibleScreen(uiState: QibleContract.UiState) {
                     .height(200.dp)
                     .width(200.dp)
                     .rotate(qiblaDirectionDegrees - rotationDegrees)
-
             )
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun QibleScreenPreview(@PreviewParameter(QibleScreenPreviewParameter::class) uiState: QibleContract.UiState) {
+    QibleScreen(
+        uiState = uiState,
+        onAction = {},
+        uiEffect = flow { }
+    )
+}
+
+
+
+

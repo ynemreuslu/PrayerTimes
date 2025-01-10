@@ -35,16 +35,19 @@ import app.ynemreuslu.prayertimes.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import kotlinx.coroutines.flow.flow
 
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LocationPermissionScreen(
+    modifier: Modifier = Modifier,
     uiState: LocationPermissionContract.UiState,
     onAction: (LocationPermissionContract.UiAction) -> Unit,
     uiEffect: Flow<LocationPermissionContract.UiEffect>,
     onNavigateToNextScreen: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
 
     val locationPermissionText = stringResource(R.string.grant_location_permission)
@@ -229,4 +232,17 @@ private fun LocationActionButton(
             fontWeight = FontWeight.SemiBold
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LocationPermissionPreview(
+    @PreviewParameter(LocationPermissionPreviewParameter::class) uiState : LocationPermissionContract.UiState
+) {
+    LocationPermissionScreen(
+        uiState =  uiState,
+        onAction = {},
+        uiEffect = flow {  },
+        onNavigateToNextScreen = {}
+    )
 }

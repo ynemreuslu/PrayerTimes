@@ -15,7 +15,6 @@ object HomeContract {
         val gregorianDate: String? = null,
         val hijriDate: String? = null,
         val prayerIndex: Int? = null,
-        val currentPrayerTime : String? = null,
         val prayerHours : String? = null,
         val prayerMinutes : String? = null,
         val prayerSeconds : String? = null,

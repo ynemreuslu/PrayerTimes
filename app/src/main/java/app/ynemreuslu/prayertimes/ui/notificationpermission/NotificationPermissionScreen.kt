@@ -25,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.LottieAnimation
@@ -37,7 +39,7 @@ import app.ynemreuslu.prayertimes.common.collectWithLifecycle
 import app.ynemreuslu.prayertimes.ui.notificationpermission.NotificationPermissionContract.RequestStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -46,15 +48,15 @@ fun NotificationPermissionScreen(
     uiState: NotificationPermissionContract.UiState,
     onAction: (NotificationPermissionContract.UiAction) -> Unit,
     uiEffect: Flow<NotificationPermissionContract.UiEffect>,
-    homeNextScreen: () -> Unit,
-    openAppSettings: () -> Unit
+    onNavigateToHomeScreen: () -> Unit,
+    onNavigateToOpenSettings: () -> Unit
 ) {
 
     val notificationPermission = rememberPermissionState(
         permission = android.Manifest.permission.POST_NOTIFICATIONS,
         onPermissionResult = { isGranted ->
             if (isGranted) {
-                homeNextScreen.invoke()
+                onNavigateToHomeScreen.invoke()
             }
         }
     )
@@ -72,8 +74,8 @@ fun NotificationPermissionScreen(
     uiEffect.collectWithLifecycle { effect ->
         when (effect) {
             NotificationPermissionContract.UiEffect.PermissionRequest -> notificationPermission.launchPermissionRequest()
-            NotificationPermissionContract.UiEffect.NavigateToHome -> homeNextScreen.invoke()
-            NotificationPermissionContract.UiEffect.NavigateToSettings -> openAppSettings.invoke()
+            NotificationPermissionContract.UiEffect.NavigateToHome -> onNavigateToHomeScreen.invoke()
+            NotificationPermissionContract.UiEffect.NavigateToSettings -> onNavigateToOpenSettings.invoke()
             NotificationPermissionContract.UiEffect.UpdateButtonState -> permissionButtonText =
                 goToSettingsText
         }
@@ -86,7 +88,7 @@ fun NotificationPermissionScreen(
             handlePermissionClick(
                 requestStatus = uiState.requestStatus,
                 onAction = onAction,
-                homeNextScreen = homeNextScreen,
+                homeNextScreen = onNavigateToHomeScreen,
             )
         },
         permissionButtonText = permissionButtonText
@@ -235,4 +237,18 @@ private fun handlePermissionClick(
             onAction(NotificationPermissionContract.UiAction.OpenAppSettings)
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NotificationPermissionPreview(
+    @PreviewParameter(NotificationPermissionPreviewParameter::class) uiState : NotificationPermissionContract.UiState
+) {
+    NotificationPermissionScreen(
+        uiState =  uiState,
+        onAction = {},
+        uiEffect = flow {  },
+        onNavigateToHomeScreen = {},
+        onNavigateToOpenSettings = {}
+    )
 }

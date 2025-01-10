@@ -33,6 +33,12 @@ class QibleViewModel @Inject constructor(
         updateLocation()
     }
 
+    fun onAction(action: QibleContract.UiAction) {
+        when(action) {
+            else -> {}
+        }
+    }
+
    private fun updateLocation() {
         viewModelScope.launch {
             val lat = locationUseCase.getLatitude()

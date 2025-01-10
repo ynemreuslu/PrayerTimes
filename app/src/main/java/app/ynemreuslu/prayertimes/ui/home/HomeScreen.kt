@@ -34,6 +34,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.ynemreuslu.prayertimes.R
@@ -41,6 +43,7 @@ import app.ynemreuslu.prayertimes.common.collectWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
@@ -140,7 +143,7 @@ fun LocationSection(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = stringResource(R.string.update_location),
+                text = stringResource(R.string.location_title),
                 style = MaterialTheme.typography.bodyMedium,
                 fontStyle = FontStyle.Italic,
                 fontWeight = FontWeight.Light,
@@ -215,7 +218,7 @@ fun getPrayerName(prayerName: Int?): String {
         3 -> stringResource(R.string.dhuhr_prayer_countdown)
         4 -> stringResource(R.string.asr_prayer_countdown)
         5 -> stringResource(R.string.maghrib_prayer_countdown)
-        6 -> stringResource(R.string.imsak_countdown)
+        6 -> stringResource(R.string.isha_prayer_countdown)
         else -> stringResource(R.string.imsak_countdown)
     }
 }
@@ -243,7 +246,7 @@ fun TimeDisplay(uiState: HomeContract.UiState) {
     }
 }
 
-//
+
 @Composable
 private fun PrayerTimeItem(
     uiState: HomeContract.UiState,
@@ -401,4 +404,16 @@ fun VerseText() {
             modifier = Modifier.padding(bottom = 8.dp)
         )
     }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreview(
+    @PreviewParameter(HomeScreenPreviewParameter::class) uiState: HomeContract.UiState
+) {
+    HomeScreen(
+        uiState = uiState,
+        uiEffect =  flow {  },
+        onAction = {}
+    )
 }

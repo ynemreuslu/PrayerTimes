@@ -21,7 +21,6 @@ import app.ynemreuslu.prayertimes.ui.notificationpermission.NotificationPermissi
 import app.ynemreuslu.prayertimes.ui.locationpermission.LocationPermissionScreen
 import app.ynemreuslu.prayertimes.ui.locationpermission.LocationPermissionViewModel
 import app.ynemreuslu.prayertimes.ui.notificationpermission.NotificationPermissionViewModel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import app.ynemreuslu.prayertimes.domain.usescase.NotificationPermissionUseCase
 import app.ynemreuslu.prayertimes.domain.usescase.SkipButtonUseCase
 import app.ynemreuslu.prayertimes.ui.qible.QibleScreen
@@ -30,7 +29,7 @@ import app.ynemreuslu.prayertimes.ui.home.HomeViewModel
 import app.ynemreuslu.prayertimes.ui.qible.QibleViewModel
 
 
-@OptIn(ExperimentalPermissionsApi::class)
+
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
@@ -103,12 +102,12 @@ fun SetupNavGraph(
                 uiState = uiState,
                 onAction = viewModel::onAction,
                 uiEffect = viewModel.uiEffect,
-                homeNextScreen = {
+                onNavigateToHomeScreen = {
                     navController.navigate(NavRoute.HOME.route) {
                         popUpTo(NavRoute.NOTIFICATION_PERMISSION.route) { inclusive = true }
                     }
                 },
-                openAppSettings = {
+                onNavigateToOpenSettings = {
                     val settingsIntent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                         putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -131,7 +130,11 @@ fun SetupNavGraph(
         composable(route = NavRoute.QIBLE.route) {
             val viewModel: QibleViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-            QibleScreen(uiState)
+            QibleScreen(
+                uiState = uiState,
+                onAction = viewModel::onAction,
+                viewModel.uiEffect
+            )
         }
 
     }
