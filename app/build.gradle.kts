@@ -86,7 +86,7 @@ dependencies {
     implementation(libs.maps.compose)
 
     implementation(libs.androidx.core.ktx)
-    implementation ("androidx.compose.material:material:1.7.6")
+    implementation (libs.androidx.material)
 
 }
 

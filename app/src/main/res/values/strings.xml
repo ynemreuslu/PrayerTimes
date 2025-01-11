@@ -1,48 +1,49 @@
 <resources>
-    <!-- Genel Uygulama Stringleri -->
-    <string name="app_name">Namaz Vakitleri</string>
-    <string name="error_location">Konum Bulunamadı</string>
-    <string name="settings">Ayarlar</string>
-    <string name="notification_permission_prompt">Namaz vakitlerini kaçırmamak için bildirimlere izin verin!</string>
-    <string name="skip_button">Atla</string>
-    <string name="allow_button">İzin Ver</string>
-    <string name="open_notification_settings">Bildirimi Ayarlardan Aç</string>
-    <string name="Qible">Kıble</string>
-    <string name="Home">Ana Sayfa</string>
-    <!-- Location  Screen -->
-    <string name="location_title">Konum</string>
-    <string name="location_icon_description">Konum İkonu</string>
-    <string name="location_permission_message">Doğru namaz vakitlerini gösterebilmemiz için konum iznine ihtiyacımız var. Lütfen izin verin.</string>
-    <string name="enable_gps">GPS\'i Etkinleştir</string>
-    <string name="open_location_settings">Konum Ayarlarını Aç</string>
-    <string name="select_location_manually">Konumu Manuel Seç</string>
-    <string name="grant_location_permission">Konum Erişimine İzin Ver</string>
-    <string name="update_location">Konumu Güncelle</string>
-    <string name="grant_notification_permission">Bildirim Erişimine İzin Ver</string>
+    <!-- General App Strings -->
+    <string name="app_name">Prayer Times</string>
+    <string name="error_location">Location Not Found</string>
+    <string name="settings">Settings</string>
+    <string name="notification_permission_prompt">Allow notifications to never miss prayer times!</string>
+    <string name="skip_button">Skip</string>
+    <string name="allow_button">Allow</string>
+    <string name="open_notification_settings">Open Notification Settings</string>
+    <string name="Qible">Qibla</string>
+    <string name="Home">Home</string>
 
-    <!-- Namaz Vakti Açıklamaları -->
-    <string name="fajr_prayer_countdown">Sabah Namazına Kalan Süre</string>
-    <string name="sunrise_prayer_countdown">Güneşin Doğuşuna   Kalan Süre</string>
-    <string name="dhuhr_prayer_countdown">Öğle Namazına Kalan Süre</string>
-    <string name="asr_prayer_countdown">İkindi Namazına Kalan Süre</string>
-    <string name="maghrib_prayer_countdown">Akşam Namazına Kalan Süre</string>
-    <string name="isha_prayer_countdown">Yatsı Namazına Kalan Süre</string>
-    <string name="imsak_countdown">İmsak Bitmesine Kalan Süre</string>
+    <!-- Location Screen -->
+    <string name="location_title">Location</string>
+    <string name="location_icon_description">Location Icon</string>
+    <string name="location_permission_message">We need location permission to show accurate prayer times. Please grant permission.</string>
+    <string name="enable_gps">Enable GPS</string>
+    <string name="open_location_settings">Open Location Settings</string>
+    <string name="select_location_manually">Select Location Manually</string>
+    <string name="grant_location_permission">Grant Location Permission</string>
+    <string name="update_location">Update Location</string>
+    <string name="grant_notification_permission">Grant Notification Permission</string>
 
-    <!-- Namaz İsimleri -->
-    <string name="prayer_fajr">Sabah</string>
-    <string name="prayer_dhuhr">Öğle</string>
-    <string name="prayer_asr">İkindi</string>
-    <string name="prayer_maghrib">Akşam</string>
-    <string name="prayer_isha">Yatsı</string>
-    <string name="prayer_imsak">İmsak</string>
+    <!-- Prayer Time Descriptions -->
+    <string name="fajr_prayer_countdown">Time Remaining for Fajr</string>
+    <string name="sunrise_prayer_countdown">Time Remaining for Sunrise</string>
+    <string name="dhuhr_prayer_countdown">Time Remaining for Dhuhr</string>
+    <string name="asr_prayer_countdown">Time Remaining for Asr</string>
+    <string name="maghrib_prayer_countdown">Time Remaining for Maghrib</string>
+    <string name="isha_prayer_countdown">Time Remaining for Isha</string>
+    <string name="imsak_countdown">Time Remaining for Imsak</string>
 
+    <!-- Prayer Names -->
+    <string name="prayer_fajr">Fajr</string>
+    <string name="prayer_dhuhr">Dhuhr</string>
+    <string name="prayer_asr">Asr</string>
+    <string name="prayer_maghrib">Maghrib</string>
+    <string name="prayer_isha">Isha</string>
+    <string name="prayer_imsak">Imsak</string>
 
-    <string name="verse_text">Sana vahyedilen Kitab’ı oku ve namazı kıl. Şüphesiz ki namaz, hayasızlıktan ve kötülükten alıkoyar. Allah’ı anmak elbette en büyüktür. Allah, yaptıklarınızı bilir.</string>
-    <string name="surah_name">Ankebut Sures</string>
-    <string name="verse_number">45. Ayet</string>
-    
-    <string name="channel_new_messages">Namaz Vakti</string>
-    <string name="channel_new_messages_description">Namaz Vakti Bildirimleri</string>
+    <!-- Quran Verse -->
+    <string name="verse_text">Recite what has been revealed to you of the Book and establish prayer. Indeed, prayer prohibits immorality and wrongdoing, and the remembrance of Allah is greater. And Allah knows what you do.</string>
+    <string name="surah_name">Surah Al-Ankabut</string>
+    <string name="verse_number">Verse 45</string>
 
+    <!-- Notification Channel -->
+    <string name="channel_new_messages">Prayer Time</string>
+    <string name="channel_new_messages_description">Prayer Time Notifications</string>
 </resources>
