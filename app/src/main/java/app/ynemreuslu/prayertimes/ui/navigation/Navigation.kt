@@ -23,11 +23,15 @@ import app.ynemreuslu.prayertimes.ui.locationpermission.LocationPermissionViewMo
 import app.ynemreuslu.prayertimes.ui.notificationpermission.NotificationPermissionViewModel
 import app.ynemreuslu.prayertimes.domain.usescase.NotificationPermissionUseCase
 import app.ynemreuslu.prayertimes.domain.usescase.SkipButtonUseCase
+import app.ynemreuslu.prayertimes.ui.chat.ChatScreen
+import app.ynemreuslu.prayertimes.ui.chat.ChatViewModel
 import app.ynemreuslu.prayertimes.ui.qible.QibleScreen
 import app.ynemreuslu.prayertimes.ui.home.HomeScreen
 import app.ynemreuslu.prayertimes.ui.home.HomeViewModel
+import app.ynemreuslu.prayertimes.ui.map.MapScreen
 import app.ynemreuslu.prayertimes.ui.qible.QibleViewModel
-
+import app.ynemreuslu.prayertimes.ui.settings.SettingsScreen
+import com.google.ai.client.generativeai.BuildConfig
 
 
 @Composable
@@ -135,6 +139,24 @@ fun SetupNavGraph(
                 onAction = viewModel::onAction,
                 viewModel.uiEffect
             )
+        }
+
+        composable(route = NavRoute.MAP.route) {
+            MapScreen()
+        }
+
+        composable(route = NavRoute.CHAT.route) {
+            val viewModel: ChatViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            ChatScreen(
+                uiState = uiState,
+                onAction = viewModel::onAction,
+                uiEffect = viewModel.uiEffect
+            )
+        }
+
+        composable(route = NavRoute.SETTINGS.route) {
+            SettingsScreen()
         }
 
     }

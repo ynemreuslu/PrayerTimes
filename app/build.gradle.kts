@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -14,10 +16,20 @@ android {
         applicationId = "app.ynemreuslu.prayertimes"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
+        compileSdk = 35
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Api Keys
+        val keystoreFile = project.rootProject.file("api_keys.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+        val geminiApiKey = properties.getProperty("GEMINI_API_KEY") ?: ""
+        val mapsApiKey = properties.getProperty("GOOGLE_MAPS_API_KEY") ?: ""
+        buildConfigField("String", "GEMINI_API_KEY", geminiApiKey)
+        buildConfigField("String", "GOOGLE_MAPS_API_KEY", mapsApiKey)
+        manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = geminiApiKey
+
     }
 
     buildTypes {
@@ -36,8 +48,10 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -84,9 +98,11 @@ dependencies {
 
      // Maps
     implementation(libs.maps.compose)
-
     implementation(libs.androidx.core.ktx)
     implementation (libs.androidx.material)
+
+    // Gemini API
+    implementation(libs.generativeai)
 
 }
 

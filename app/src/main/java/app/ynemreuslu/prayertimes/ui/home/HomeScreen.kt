@@ -140,6 +140,7 @@ fun LocationSection(
                 text = locationInfo,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(

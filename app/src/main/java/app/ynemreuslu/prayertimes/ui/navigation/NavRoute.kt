@@ -5,5 +5,8 @@ enum class NavRoute(val route: String)  {
     NOTIFICATION_PERMISSION("notification_permission"),
     HOME("home"),
     MAP("map"),
-    QIBLE("qible")
+    QIBLE("qible"),
+    CHAT("chat"),
+    SETTINGS("settings"),
+
 }

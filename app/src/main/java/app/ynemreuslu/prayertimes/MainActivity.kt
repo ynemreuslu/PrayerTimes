@@ -5,8 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -89,7 +93,7 @@ class MainActivity : ComponentActivity() {
         ) { innerPadding ->
             SetupNavGraph(
                 navController = navController,
-                modifier = Modifier.padding(innerPadding),
+                modifier = Modifier.padding(innerPadding).consumeWindowInsets(innerPadding).imePadding(),
                 locationPermissionUseCase = locationPermissionUseCase,
                 gspControllerUseCase = gspControllerUseCase,
                 notificationUseCase = notificationUseCase,
