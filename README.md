@@ -1,6 +1,8 @@
 # 🕌 Prayer Times App 🌙
 
-📱 **Prayer Times App** is a modern and user-friendly mobile application designed to help Muslim users easily track daily prayer times. 🕋 It shows prayer times based on your location and helps you find the Qibla direction. 🚀
+📱 **Prayer Times App** a modern and user-friendly mobile application designed to help Muslim users easily track daily prayer times. 🕋
+It shows prayer times based on your location, helps you find the Qibla direction 🚀, and also offers an AI-powered chatbot as a virtual fatwa line. 🤖
+This allows users to ask religious questions and receive instant answers directly from the chatbot.
 
 ---
 
@@ -17,6 +19,7 @@ This app is built with the latest technologies:
 - **Location Permission** 📍: Used to fetch the user's location for accurate prayer times.
 - **Notification Permission** 🔔: Used to send notifications to the user.
 - **Sensors** 🧭: Used to find the Qibla direction.
+- **Google Gemini API** 🤖: Used to power the in-app chatbot that answers user questions using AI.
 
 ---
 
