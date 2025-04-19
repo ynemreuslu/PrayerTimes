@@ -36,6 +36,8 @@ The app is developed following clean and sustainable code principles using the f
     <img src="https://github.com/ynemreuslu/PrayerTimes/blob/master/app/src/main/assets/images/notification.png?raw=true" alt="Notification Permission Screen" width="200"/>
     <img src="https://github.com/ynemreuslu/PrayerTimes/blob/master/app/src/main/assets/images/prayer.png?raw=true" alt="Home Screen" width="200"/>
     <img src="https://github.com/ynemreuslu/PrayerTimes/blob/master/app/src/main/assets/images/qible.png?raw=true" alt="Qible Screen" width="200"/>
+     <img src="https://github.com/ynemreuslu/PrayerTimes/blob/master/app/src/main/assets/images/chatbot.png?raw=true" alt="Qible Screen" width="200"/>
+    
 </div>
 
 ---
