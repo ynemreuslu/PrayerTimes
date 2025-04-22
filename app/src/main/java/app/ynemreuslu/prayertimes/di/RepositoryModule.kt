@@ -5,15 +5,16 @@ import app.ynemreuslu.prayertimes.domain.repository.PrayerTimeRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
+
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 abstract class RepositoryModule {
 
     @Binds
-    @Singleton
+    @ViewModelScoped
     abstract fun bindPrayerTimeRepository(
         prayerTimeRepositoryImpl: PrayerTimeRepositoryImpl
     ): PrayerTimeRepository
