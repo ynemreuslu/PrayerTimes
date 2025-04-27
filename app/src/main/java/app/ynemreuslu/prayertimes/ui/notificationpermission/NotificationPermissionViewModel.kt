@@ -13,9 +13,9 @@ import android.os.Build
 import app.ynemreuslu.prayertimes.common.hasNotificationPermissionDenied
 import app.ynemreuslu.prayertimes.common.hasNotificationPermissionGranted
 import app.ynemreuslu.prayertimes.common.shouldShowNotificationPermissionRationale
-import app.ynemreuslu.prayertimes.domain.usescase.NotificationPermissionUseCase
-import app.ynemreuslu.prayertimes.domain.usescase.NotificationStatusUseCase
-import app.ynemreuslu.prayertimes.domain.usescase.SkipButtonUseCase
+import app.ynemreuslu.prayertimes.domain.usescase.notificationpermission.NotificationStatusUseCase
+import app.ynemreuslu.prayertimes.domain.usescase.notificationpermission.NotificationPermissionUseCases
+import app.ynemreuslu.prayertimes.domain.usescase.skipbutton.SkipButtonUseCases
 import app.ynemreuslu.prayertimes.ui.notificationpermission.NotificationPermissionContract.RequestStatus
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
@@ -27,8 +27,8 @@ import kotlinx.coroutines.flow.update
 @HiltViewModel
 class NotificationPermissionViewModel @Inject constructor(
     @ApplicationContext private val applicationContext: Context,
-    private val notificationPermissionUseCase: NotificationPermissionUseCase,
-    private val skipButtonUseCase: SkipButtonUseCase,
+    private val notificationPermissionUseCase: NotificationPermissionUseCases,
+    private val skipButtonUseCase: SkipButtonUseCases,
     private val notificationStatusUseCase: NotificationStatusUseCase,
 ) : ViewModel() {
 
@@ -68,7 +68,7 @@ class NotificationPermissionViewModel @Inject constructor(
         viewModelScope.launch {
             val isGranted = applicationContext.hasNotificationPermissionGranted()
             val isPermanentlyDenied = !shouldShowRequestPermissionRationale()
-            val permissionDeniedCount = notificationPermissionUseCase.fetchDeniedCount()
+            val permissionDeniedCount = notificationPermissionUseCase.getNotificationPermissionDeniedCount()
 
 
             val newStatus = when {
@@ -84,11 +84,11 @@ class NotificationPermissionViewModel @Inject constructor(
                 )
             }
             notificationStatusUseCase.invoke(newStatus.name)
-            notificationPermissionUseCase.invoke(isGranted)
+            notificationPermissionUseCase.setNotificationPermissionGranted(isGranted)
             when (newStatus) {
                 RequestStatus.GRANTED -> {
                     navigateToHomeScreen()
-                    notificationPermissionUseCase.invoke(true)
+                    notificationPermissionUseCase.setNotificationPermissionGranted(true)
                 }
 
                 RequestStatus.PERMANENTLY_DENIED -> {
@@ -96,12 +96,12 @@ class NotificationPermissionViewModel @Inject constructor(
                     emitUiEffect(
                         NotificationPermissionContract.UiEffect.UpdateButtonState
                     )
-                    notificationPermissionUseCase.incrementPermissionDeniedCount()
+                    notificationPermissionUseCase.incrementNotificationPermissionDeniedCount()
                 }
 
                 RequestStatus.DENIED -> {
                     requestNotificationPermission()
-                    notificationPermissionUseCase.incrementPermissionDeniedCount()
+                    notificationPermissionUseCase.incrementNotificationPermissionDeniedCount()
                 }
 
                 else -> {
@@ -130,7 +130,7 @@ class NotificationPermissionViewModel @Inject constructor(
     }
 
     private suspend fun saveSkipPreference() {
-        skipButtonUseCase.invoke(true)
+        skipButtonUseCase.setSkipButtonState(true)
     }
 
     private fun openNotificationSettings() {

@@ -14,8 +14,8 @@ import android.provider.Settings
 import androidx.activity.result.IntentSenderRequest
 import app.ynemreuslu.prayertimes.common.GpsStatusFlow
 import app.ynemreuslu.prayertimes.common.hasLocationPermissionGranted
-import app.ynemreuslu.prayertimes.domain.usescase.GpsControllerUseCase
-import app.ynemreuslu.prayertimes.domain.usescase.LocationPermissionUseCase
+import app.ynemreuslu.prayertimes.domain.usescase.gps.GpsUseCases
+import app.ynemreuslu.prayertimes.domain.usescase.locationpermission.LocationPermissionUseCases
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -33,8 +33,8 @@ import javax.inject.Inject
 class LocationPermissionViewModel @Inject constructor(
     @ApplicationContext private val applicationContext: Context,
     private val gpsStatus: GpsStatusFlow,
-    private val gpsControllerUseCase: GpsControllerUseCase,
-    private val locationPermissionUseCase: LocationPermissionUseCase,
+    private val gpsControllerUseCase: GpsUseCases,
+    private val locationPermissionUseCase: LocationPermissionUseCases,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LocationPermissionContract.UiState())
@@ -56,7 +56,7 @@ class LocationPermissionViewModel @Inject constructor(
         viewModelScope.launch {
             val hasLocationPermission = checkLocationPermissions()
             updateUiState { copy(isPermissionGranted = hasLocationPermission) }
-            locationPermissionUseCase.invoke(hasLocationPermission)
+            locationPermissionUseCase.setLocationPermissionGranted(hasLocationPermission)
             requestLocationPermissions()
 
         }
@@ -71,15 +71,15 @@ class LocationPermissionViewModel @Inject constructor(
             gpsStatus.observe()
                 .collect { isGpsEnabled ->
                     updateUiState { copy(isGpsEnabled = isGpsEnabled) }
-                    locationPermissionUseCase.invoke(true)
+                    locationPermissionUseCase.setLocationPermissionGranted(true)
                     if (!isGpsEnabled) {
-                        gpsControllerUseCase.invoke(false)
-                        locationPermissionUseCase.invoke(true)
+                        gpsControllerUseCase.setGpsStatus(false)
+                        locationPermissionUseCase.setLocationPermissionGranted(true)
                         verifyGpsSettings()
                         emitUiEffect(LocationPermissionContract.UiEffect.UpdateActionButtonText)
                     } else {
-                        gpsControllerUseCase.invoke(false)
-                        locationPermissionUseCase.invoke(true)
+                        gpsControllerUseCase.setGpsStatus(false)
+                        locationPermissionUseCase.setLocationPermissionGranted(true)
                         navigateToNextScreen()
                     }
                 }

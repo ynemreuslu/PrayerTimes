@@ -1,0 +1,12 @@
+package app.ynemreuslu.prayertimes.domain.usescase.notificationpermission
+
+import app.ynemreuslu.prayertimes.domain.usescase.notificationpermission.IsNotificationPermissionGrantedUseCase
+import app.ynemreuslu.prayertimes.domain.usescase.notificationpermission.SetNotificationPermissionGrantedUseCase
+import javax.inject.Inject
+
+data class NotificationPermissionUseCases @Inject constructor(
+    val setNotificationPermissionGranted: SetNotificationPermissionGrantedUseCase,
+    val isNotificationPermissionGranted: IsNotificationPermissionGrantedUseCase,
+    val getNotificationPermissionDeniedCount: GetNotificationPermissionDeniedCountUseCase,
+    val incrementNotificationPermissionDeniedCount: IncrementNotificationPermissionDeniedCountUseCase
+)

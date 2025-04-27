@@ -79,8 +79,6 @@ val bottomNavItems = listOf(
     BottomNavItem.Home,
     BottomNavItem.Qible,
     BottomNavItem.Chat,
-    BottomNavItem.Settings
-
 )
 
 @Preview(showBackground = true)

@@ -15,73 +15,60 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import app.ynemreuslu.prayertimes.domain.usescase.GpsControllerUseCase
-import app.ynemreuslu.prayertimes.domain.usescase.LocationPermissionUseCase
+import app.ynemreuslu.prayertimes.domain.usescase.gps.GpsUseCases
 import app.ynemreuslu.prayertimes.ui.notificationpermission.NotificationPermissionScreen
 import app.ynemreuslu.prayertimes.ui.locationpermission.LocationPermissionScreen
 import app.ynemreuslu.prayertimes.ui.locationpermission.LocationPermissionViewModel
 import app.ynemreuslu.prayertimes.ui.notificationpermission.NotificationPermissionViewModel
-import app.ynemreuslu.prayertimes.domain.usescase.NotificationPermissionUseCase
-import app.ynemreuslu.prayertimes.domain.usescase.SkipButtonUseCase
+import app.ynemreuslu.prayertimes.domain.usescase.locationpermission.LocationPermissionUseCases
+import app.ynemreuslu.prayertimes.domain.usescase.notificationpermission.NotificationPermissionUseCases
+import app.ynemreuslu.prayertimes.domain.usescase.skipbutton.SkipButtonUseCases
 import app.ynemreuslu.prayertimes.ui.chat.ChatScreen
 import app.ynemreuslu.prayertimes.ui.chat.ChatViewModel
 import app.ynemreuslu.prayertimes.ui.qible.QibleScreen
 import app.ynemreuslu.prayertimes.ui.home.HomeScreen
 import app.ynemreuslu.prayertimes.ui.home.HomeViewModel
-import app.ynemreuslu.prayertimes.ui.map.MapScreen
 import app.ynemreuslu.prayertimes.ui.qible.QibleViewModel
-import app.ynemreuslu.prayertimes.ui.settings.SettingsScreen
-import com.google.ai.client.generativeai.BuildConfig
 
 
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    locationPermissionUseCase: LocationPermissionUseCase,
-    gspControllerUseCase: GpsControllerUseCase,
-    notificationUseCase: NotificationPermissionUseCase,
-    skipButtonUseCase: SkipButtonUseCase,
+    locationPermissionUseCase: LocationPermissionUseCases,
+    gspControllerUseCase: GpsUseCases,
+    notificationUseCase: NotificationPermissionUseCases,
+    skipButtonUseCase: SkipButtonUseCases,
 ) {
     val context = LocalContext.current
     val startDestination = remember {
         when {
-            locationPermissionUseCase.checkPermissionGranted() &&
-                    gspControllerUseCase.isGpsDisabled() -> NavRoute.LOCATION_PERMISSION.route
-            notificationUseCase.checkPermissionGranted() -> NavRoute.HOME.route
+            locationPermissionUseCase.isLocationPermissionGranted() && gspControllerUseCase.isGpsDisabled() -> NavRoute.LOCATION_PERMISSION.route
+
+            notificationUseCase.isNotificationPermissionGranted() -> NavRoute.HOME.route
             skipButtonUseCase.isSkipButtonEnabled() -> NavRoute.HOME.route
             else -> NavRoute.LOCATION_PERMISSION.route
         }
     }
 
     NavHost(
-        navController = navController,
-        startDestination = startDestination,
-        enterTransition = {
-            slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Start,
-                tween(300)
-            )
-        },
-        exitTransition = {
-            slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Right,
-                tween(300)
-            )
-        },
-        popEnterTransition = {
-            slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.End,
-                tween(300)
-            )
-        },
-        popExitTransition = {
-            slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Left,
-                tween(300)
-            )
-        },
-        modifier = modifier
+        navController = navController, startDestination = startDestination, enterTransition = {
+        slideIntoContainer(
+            AnimatedContentTransitionScope.SlideDirection.Start, tween(300)
+        )
+    }, exitTransition = {
+        slideOutOfContainer(
+            AnimatedContentTransitionScope.SlideDirection.Right, tween(300)
+        )
+    }, popEnterTransition = {
+        slideIntoContainer(
+            AnimatedContentTransitionScope.SlideDirection.End, tween(300)
+        )
+    }, popExitTransition = {
+        slideOutOfContainer(
+            AnimatedContentTransitionScope.SlideDirection.Left, tween(300)
+        )
+    }, modifier = modifier
     ) {
         composable(route = NavRoute.LOCATION_PERMISSION.route) {
             val viewModel: LocationPermissionViewModel = hiltViewModel()
@@ -94,8 +81,7 @@ fun SetupNavGraph(
                     navController.navigate(NavRoute.NOTIFICATION_PERMISSION.route) {
                         popUpTo(NavRoute.LOCATION_PERMISSION.route) { inclusive = false }
                     }
-                }
-            )
+                })
         }
 
         composable(route = NavRoute.NOTIFICATION_PERMISSION.route) {
@@ -117,8 +103,7 @@ fun SetupNavGraph(
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     }
                     context.startActivity(settingsIntent)
-                }
-            )
+                })
         }
 
         composable(route = NavRoute.HOME.route) {
@@ -135,30 +120,17 @@ fun SetupNavGraph(
             val viewModel: QibleViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             QibleScreen(
-                uiState = uiState,
-                onAction = viewModel::onAction,
-                viewModel.uiEffect
+                uiState = uiState, onAction = viewModel::onAction, viewModel.uiEffect
             )
-        }
-
-        composable(route = NavRoute.MAP.route) {
-            MapScreen()
         }
 
         composable(route = NavRoute.CHAT.route) {
             val viewModel: ChatViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             ChatScreen(
-                uiState = uiState,
-                onAction = viewModel::onAction,
-                uiEffect = viewModel.uiEffect
+                uiState = uiState, onAction = viewModel::onAction, uiEffect = viewModel.uiEffect
             )
         }
-
-        composable(route = NavRoute.SETTINGS.route) {
-            SettingsScreen()
-        }
-
     }
 }
 

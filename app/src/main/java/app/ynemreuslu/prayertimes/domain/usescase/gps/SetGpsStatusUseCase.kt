@@ -1,16 +1,12 @@
-package app.ynemreuslu.prayertimes.domain.usescase
+package app.ynemreuslu.prayertimes.domain.usescase.gps
 
 import app.ynemreuslu.prayertimes.domain.repository.LocalPermissionManagerRepository
-import jakarta.inject.Inject
+import javax.inject.Inject
 
-class GpsControllerUseCase @Inject constructor(
+class SetGpsStatusUseCase @Inject constructor(
     private val repository: LocalPermissionManagerRepository
 ) {
     suspend operator fun invoke(isGpsDisabled: Boolean) {
         repository.setGpsStatus(isGpsDisabled)
-    }
-
-     fun isGpsDisabled(): Boolean {
-        return repository.isGpsDisabled()
     }
 }

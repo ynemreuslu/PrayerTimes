@@ -10,9 +10,9 @@ import androidx.lifecycle.viewModelScope
 import app.ynemreuslu.prayertimes.common.getLocationApi32AndBelow
 import app.ynemreuslu.prayertimes.common.hasLocationPermissionGranted
 import app.ynemreuslu.prayertimes.domain.prayer.PrayerTimings
-import app.ynemreuslu.prayertimes.domain.usescase.GetPrayerTimingsUseCase
-import app.ynemreuslu.prayertimes.domain.usescase.LocationPermissionUseCase
-import app.ynemreuslu.prayertimes.domain.usescase.LocationUseCase
+import app.ynemreuslu.prayertimes.domain.usescase.location.LocationUseCases
+import app.ynemreuslu.prayertimes.domain.usescase.locationpermission.LocationPermissionUseCases
+import app.ynemreuslu.prayertimes.domain.usescase.prayer.GetPrayerTimingsUseCase
 import app.ynemreuslu.prayertimes.util.Resource
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
@@ -46,8 +46,8 @@ class HomeViewModel @Inject constructor(
     private val getPrayerTimingsUseCase: GetPrayerTimingsUseCase,
     @ApplicationContext private val appContext: Context,
     private val fusedLocationClient: FusedLocationProviderClient,
-    private val locationUseCase: LocationUseCase,
-    private val locationPermissionUseCase: LocationPermissionUseCase,
+    private val locationUseCase: LocationUseCases,
+    private val locationPermissionUseCase: LocationPermissionUseCases,
     private val geocoder: Geocoder,
 ) : ViewModel() {
 
@@ -76,7 +76,7 @@ class HomeViewModel @Inject constructor(
 
     private fun locationRequest() {
         viewModelScope.launch {
-            if (locationPermissionUseCase.checkPermissionGranted()) {
+            if (locationPermissionUseCase.isLocationPermissionGranted()) {
                 emitUiEffect(HomeContract.UiEffect.RequestLocationPermission)
             }
         }
@@ -138,8 +138,8 @@ class HomeViewModel @Inject constructor(
     private fun updateLocationData(latitude: Double, longitude: Double) {
         viewModelScope.launch {
             locationUseCase.apply {
-                fetchLatitude(latitude)
-                fetchLongitude(longitude)
+                setLatitude(latitude)
+                setLongitude(longitude)
             }
             updateUiState {
                 copy(location = buildLocationString(latitude, longitude))

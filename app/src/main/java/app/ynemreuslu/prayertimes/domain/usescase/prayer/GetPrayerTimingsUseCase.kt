@@ -1,4 +1,4 @@
-package app.ynemreuslu.prayertimes.domain.usescase
+package app.ynemreuslu.prayertimes.domain.usescase.prayer
 
 
 import app.ynemreuslu.prayertimes.domain.prayer.PrayerTimings
